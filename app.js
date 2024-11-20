@@ -21,6 +21,7 @@ function populateTable(data) {
                 img.src = cell;
                 img.alt = 'Catalog Image';
                 img.style.width = '100px';
+                document.body.appendChild(img); // Örneğin, doğrudan body içine ekleme
                 td.appendChild(img);
             } else {
                 td.textContent = cell;
