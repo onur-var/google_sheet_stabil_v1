@@ -18,7 +18,7 @@ function populateTable(data) {
             const td = document.createElement('td');
             if (index === 3) { // Image column
                 const img = document.createElement('img');
-                img.src = 'https://drive.google.com/file/d/1otmBJ3vQVgLyvSQVKS5eZBmfJG_2FPmF';
+                img.src = cell;
                 img.alt = 'Catalog Image';
                 img.style.width = '100px';
                 td.appendChild(img);
