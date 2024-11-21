@@ -5,6 +5,10 @@ const RANGE = 'Sayfa1';                      // Sheet adı (genelde "Sheet1")
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     const response = await fetch(url);
+if (!response.ok) {
+    console.error("Error fetching data:", response.status, response.statusText);
+    return [];
+}
     const data = await response.json();
     return data.values;
 }
