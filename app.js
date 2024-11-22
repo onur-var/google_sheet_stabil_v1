@@ -2,8 +2,10 @@ const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g'; // Google Sheets API 
 const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk'; // Google Sheet ID
 const RANGE = 'Sayfa1'; // Sheet adı (genelde "Sheet1")
 
-// Google Drive ID'sinden thumbnail URL'sini döndüren fonksiyon
-function getDriveThumbnailUrl(fileId) {
+// Google Drive dosyasının tam URL'sini ID'ye çeviren fonksiyon
+function getDriveThumbnailUrl(fileUrl) {
+    // URL'den dosya ID'sini ayırma
+    const fileId = fileUrl.split('/d/')[1].split('/')[0];
     return `https://drive.google.com/thumbnail?id=${fileId}`;
 }
 
@@ -23,8 +25,7 @@ function populateTable(data) {
             const td = document.createElement('td');
             if (index === 3) { // Image column
                 const img = document.createElement('img');
-                const driveFileId = cell; // Hücredeki Google Drive file ID'si
-                const thumbnailUrl = getDriveThumbnailUrl(driveFileId); // ID'den thumbnail URL'sini oluştur
+                const thumbnailUrl = getDriveThumbnailUrl(cell); // Google Drive URL'sini thumbnail formatına çevir
                 img.src = thumbnailUrl;
                 img.alt = 'Catalog Image';
                 img.style.width = '100px';
