@@ -1,16 +1,19 @@
 const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g'; // Google Sheets API Key
 const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk'; // Google Sheet ID
 const RANGE = 'Sayfa1'; // Sheet adı (genelde "Sheet1")
-// Google Drive ID'den thumbnail linki dönüştüren fonksiyon
+
+// Google Drive ID'sinden thumbnail URL'sini döndüren fonksiyon
 function getDriveThumbnailUrl(fileId) {
     return `https://drive.google.com/thumbnail?id=${fileId}`;
 }
+
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
     return data.values;
 }
+
 function populateTable(data) {
     const tbody = document.querySelector("#catalog-table tbody");
     tbody.innerHTML = ''; // Mevcut içeriği temizle
@@ -34,6 +37,7 @@ function populateTable(data) {
         tbody.appendChild(tr);
     });
 }
+
 (async function init() {
     const data = await fetchSheetData();
     populateTable(data);
