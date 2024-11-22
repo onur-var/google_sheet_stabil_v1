@@ -14,8 +14,8 @@ async function fetchSheetData() {
 }
 
 function convertDriveLinkToThumbnail(link) {
-    // Google Drive linkindeki ID'yi çekmek için daha esnek regex
-    const regex = /(?:https:\/\/drive\.google\.com\/(?:file\/d|uc\?id))\/([a-zA-Z0-9_-]+)/;
+    // Google Drive linkini parse et
+    const regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
     const match = link.match(regex);
 
     if (match && match[1]) {
