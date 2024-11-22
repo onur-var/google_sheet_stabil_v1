@@ -14,18 +14,37 @@ async function fetchSheetData() {
 }
 
 function convertDriveLinkToThumbnail(link) {
-    // Google Drive 'file/d/{id}' formatındaki linki alır
-    const regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
-    const match = link.match(regex);
-
-    if (match && match[1]) {
-        // ID'yi al ve 'uc?export=view&id=' formatına dönüştür
-        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-    } else {
-        // Geçersiz format
-        return 'Geçersiz Google Drive linki';
+    // uc?export=view&id= formatındaki linki dönüştür
+    const ucRegex = /https:\/\/drive\.google\.com\/uc\?export=view&id=([a-zA-Z0-9_-]+)/;
+    const ucMatch = link.match(ucRegex);
+    
+    if (ucMatch && ucMatch[1]) {
+        // Doğrudan thumbnail URL'si
+        return `https://drive.google.com/thumbnail?id=${ucMatch[1]}`;
     }
+
+    // file/d/{id} formatındaki linki dönüştür
+    const fileRegex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const fileMatch = link.match(fileRegex);
+
+    if (fileMatch && fileMatch[1]) {
+        // file/d/{id} formatını uc?export=view&id= formatına çevir
+        return `https://drive.google.com/uc?export=view&id=${fileMatch[1]}`;
+    }
+
+    // view?usp=sharing formatındaki linki dönüştür
+    const viewRegex = /https:\/\/drive\.google\.com\/.*\/d\/([a-zA-Z0-9_-]+)/;
+    const viewMatch = link.match(viewRegex);
+
+    if (viewMatch && viewMatch[1]) {
+        // view?usp=sharing formatını uc?export=view&id= formatına çevir
+        return `https://drive.google.com/uc?export=view&id=${viewMatch[1]}`;
+    }
+
+    // Geçersiz format
+    return 'Geçersiz Google Drive linki';
 }
+
 
 
 function populateTable(data) {
