@@ -13,37 +13,6 @@ if (!response.ok) {
     return data.values;
 }
 
-function formatDriveLink(link) {
-    // Google Drive bağlantısını kontrol et ve dönüştür
-    if (link.includes("drive.google.com")) {
-        const fileId = link.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-        if (fileId) {
-            return `https://drive.google.com/uc?export=view&id=${fileId}`;
-        }
-    }
-    return link; // Eğer Drive bağlantısı değilse, olduğu gibi döndür
-}
-
-function fetchImages() {
-    fetch("GOOGLE_SHEET_URL")
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(row => {
-                const formattedLink = formatDriveLink(row.imageUrl); // Sütun adını kontrol edin
-                console.log("Formatted Link:", formattedLink);
-
-                // DOM'da resmi göstermek için:
-                const img = document.createElement("img");
-                img.src = formattedLink;
-                img.alt = "Image";
-                document.body.appendChild(img);
-            });
-        })
-        .catch(error => console.error("Hata:", error));
-}
-fetchImages();
-
-
 function populateTable(data) {
     const tbody = document.querySelector("#catalog-table tbody");
     tbody.innerHTML = ''; // Mevcut içeriği temizle
