@@ -39,20 +39,21 @@ function populateTable(data) {
     tbody.innerHTML = ''; // Mevcut içeriği temizle
     data.slice(1).forEach(row => { // İlk satır başlıklarıdır
         const tr = document.createElement('tr');
-        row.forEach((cell, index) => {
-            const td = document.createElement('td');
-            if (index === 3) { // Image column
-                const img = document.createElement('img');
-                img.src = cell;
-                console.log(cell);
-                img.alt = 'Catalog Image';
-                img.style.width = '100px';
-                td.appendChild(img);
-            } else {
-                td.textContent = cell;
-            }
-            tr.appendChild(td);
-        });
+       row.forEach((cell, index) => {
+    const td = document.createElement('td');
+    if (index === 3) { // Image column
+        const img = document.createElement('img');
+        const thumbnailUrl = convertDriveLinkToThumbnail(cell);  // Linki dönüştür
+        img.src = thumbnailUrl;
+        console.log(thumbnailUrl); // Linki kontrol etmek için
+        img.alt = 'Catalog Image';
+        img.style.width = '100px';
+        td.appendChild(img);
+    } else {
+        td.textContent = cell;
+    }
+    tr.appendChild(td);
+});
         tbody.appendChild(tr);
     });
 }
