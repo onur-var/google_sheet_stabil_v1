@@ -2,6 +2,7 @@ const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g'; // Google Sheets API 
 const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk';     // Google Sheet ID
 const RANGE = 'Sayfa1';                      // Sheet adı (genelde "Sheet1")
 
+
 async function fetchSheetData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     const response = await fetch(url);
@@ -12,6 +13,26 @@ if (!response.ok) {
     const data = await response.json();
     return data.values;
 }
+
+function convertDriveLinkToThumbnail(link) {
+    // Google Drive linkini parse et
+    const regex = /https:\/\/drive\.google\.com\/uc\?export=view&id=([a-zA-Z0-9_-]+)/;
+    const match = link.match(regex);
+
+    if (match && match[1]) {
+        // ID'yi al ve thumbnail formatını oluştur
+        return `https://drive.google.com/thumbnail?id=${match[1]}`;
+    } else {
+        // Hatalı format
+        return 'Geçersiz Google Drive linki';
+    }
+}
+
+// Kullanım örneği:
+const driveLink = "https://drive.google.com/uc?export=view&id=1otmBJ3vQVgLyvSQVKS5eZBmfJG_2FPmF";
+const thumbnailLink = convertDriveLinkToThumbnail(driveLink);
+console.log(thumbnailLink); // Çıktı: https://drive.google.com/thumbnail?id=1otmBJ3vQVgLyvSQVKS5eZBmfJG_2FPmF
+
 
 function populateTable(data) {
     const tbody = document.querySelector("#catalog-table tbody");
