@@ -14,18 +14,19 @@ async function fetchSheetData() {
 }
 
 function convertDriveLinkToThumbnail(link) {
-    // Google Drive linkinden ID'yi al
+    // Google Drive 'file/d/{id}' formatındaki linki alır
     const regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
     const match = link.match(regex);
 
     if (match && match[1]) {
-        // ID'yi al ve thumbnail formatını oluştur
+        // ID'yi al ve 'uc?export=view&id=' formatına dönüştür
         return `https://drive.google.com/uc?export=view&id=${match[1]}`;
     } else {
-        // Hatalı format
+        // Geçersiz format
         return 'Geçersiz Google Drive linki';
     }
 }
+
 
 function populateTable(data) {
     const tbody = document.querySelector("#catalog-table tbody");
