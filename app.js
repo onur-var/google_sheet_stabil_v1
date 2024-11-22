@@ -14,13 +14,13 @@ async function fetchSheetData() {
 }
 
 function convertDriveLinkToThumbnail(link) {
-    // Google Drive linkinden dosya ID'sini almak için yeni regex
-    const regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+    // Google Drive linkindeki ID'yi çekmek için daha esnek regex
+    const regex = /(?:https:\/\/drive\.google\.com\/(?:file\/d|uc\?id))\/([a-zA-Z0-9_-]+)/;
     const match = link.match(regex);
 
     if (match && match[1]) {
         // ID'yi al ve thumbnail formatını oluştur
-        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        return `https://drive.google.com/thumbnail?id=${match[1]}`;
     } else {
         // Hatalı format
         return 'Geçersiz Google Drive linki';
