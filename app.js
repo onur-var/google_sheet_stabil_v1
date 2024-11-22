@@ -1,23 +1,40 @@
-function populateTable(data) {
-  const tbody = document.querySelector("#catalog-table tbody");
-  tbody.innerHTML = ''; // Clear existing content
+const API_KEY = 'AIzaSyDltb5FbPvL9bLgj_GK4_DEDaPK0A7oM_g'; // Google Sheets API Key
+const SHEET_ID = '16XhSuD_8tEJ0wK_6H5f7csqIfsF6pFneNSphVb_6wsk';     // Google Sheet ID
+const RANGE = 'Sayfa1';                      // Sheet adı (genelde "Sheet1")
 
-  data.slice(1).forEach(row => {
-    const tr = document.createElement('tr');
-    row.forEach((cell, index) => {
-      const td = document.createElement('td');
-      if (index === 3) { // Image column (assuming image URL is in column 3)
-        const fileId = cell.split('/')[4]; // Extract file ID from the URL
-        const img = document.createElement('img');
-        img.src = `https://drive.google.com/thumbnail?id=${fileId}`;
-        img.alt = 'Catalog Image';
-        img.style.width = '100px';
-        td.appendChild(img);
-      } else {
-        td.textContent = cell;
-      }
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
+async function fetchSheetData() {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.values;
 }
+
+function populateTable(data) {
+    const tbody = document.querySelector("#catalog-table tbody");
+    tbody.innerHTML = ''; // Mevcut içeriği temizle
+    data.slice(1).forEach(row => { // İlk satır başlıklarıdır
+        const tr = document.createElement('tr');
+        row.forEach((cell, index) => {
+            const td = document.createElement('td');
+            if (index === 3) { // Image column
+                const img = document.createElement('img');
+                // Convert the Drive file ID to the thumbnail URL
+                const fileId = cell.split('/')[5]; // Extract the file ID from the URL in the cell
+                const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
+                img.src = thumbnailUrl;
+                img.alt = 'Catalog Image';
+                img.style.width = '100px';
+                td.appendChild(img);
+            } else {
+                td.textContent = cell;
+            }
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+}
+
+(async function init() {
+    const data = await fetchSheetData();
+    populateTable(data);
+})();
