@@ -23,6 +23,7 @@ function populateTable(data) {
             if (index === 3) { // Image column
                 const img = document.createElement('img');
                 img.src = cell;
+                console.log(cell);
                 img.alt = 'Catalog Image';
                 img.style.width = '100px';
                 td.appendChild(img);
