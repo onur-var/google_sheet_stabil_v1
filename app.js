@@ -16,7 +16,7 @@ function populateTable(data) {
     thead.innerHTML = '';
 
     // Yeni Başlıklar
-    const headers = ["Malzeme ismi", "Part number", "Kategori", "Resim"];
+    const headers = ["Malzeme ismi", "Part number", "Kategori", "Uçak Tipi", "Resim"];
     const filterRow = document.createElement('tr');
     const headerRow = document.createElement('tr');
 
@@ -32,7 +32,7 @@ function populateTable(data) {
         filterInput.innerHTML = '<option value="">Tümü</option>'; // Varsayılan "Tümü"
 
         // Filtre seçenekleri dolduruluyor
-        const uniqueValues = [...new Set(data.slice(1).map(row => row[index]))]; // Unique değerler
+        const uniqueValues = [...new Set(data.slice(1).map(row => (index === 4 ? row[3] : row[index])))]; // Dinamik sütun
         uniqueValues.forEach(value => {
             const option = document.createElement('option');
             option.value = value;
@@ -54,7 +54,13 @@ function populateTable(data) {
         const tr = document.createElement('tr');
         row.forEach((cell, index) => {
             const td = document.createElement('td');
-            if (index === 3) { // Resim kolon
+
+            // Resimler 5. sütunda olacak (indis: 4)
+            if (index === 3) {
+                // 4. sütun Uçak Tipi
+                td.textContent = cell;
+            } else if (index === 4) {
+                // 5. sütun Resim
                 const fileId = cell.split('/')[5]; // Drive dosya ID
                 const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
                 const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
@@ -73,6 +79,7 @@ function populateTable(data) {
             } else {
                 td.textContent = cell;
             }
+
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -85,11 +92,19 @@ function filterTable(data) {
     tbody.innerHTML = ''; // Temizle
 
     data.slice(1).forEach(row => {
-        if (row.every((cell, index) => !filters[index] || cell === filters[index])) {
+        if (row.every((cell, index) => {
+            if (index === 4) return !filters[4] || row[3] === filters[4]; // Resim filtre sütunu (4. sütun Uçak Tipi)
+            return !filters[index] || cell === filters[index];
+        })) {
             const tr = document.createElement('tr');
             row.forEach((cell, index) => {
                 const td = document.createElement('td');
-                if (index === 3) { // Resim kolon
+
+                if (index === 3) {
+                    // 4. sütun: Uçak Tipi
+                    td.textContent = cell;
+                } else if (index === 4) {
+                    // 5. sütun: Resim
                     const fileId = cell.split('/')[5]; // Drive dosya ID
                     const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
                     const originalUrl = `https://drive.google.com/file/d/${fileId}/view`;
@@ -108,6 +123,7 @@ function filterTable(data) {
                 } else {
                     td.textContent = cell;
                 }
+
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
