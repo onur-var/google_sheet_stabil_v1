@@ -7,11 +7,18 @@ body {
     color: #333;
 }
 
-input[type="text"] {
+h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+#search-box {
     width: 100%;
     max-width: 400px;
     padding: 10px;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
+    display: block;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
@@ -35,10 +42,6 @@ input[type="text"] {
     padding: 10px;
     text-align: left;
     font-weight: bold;
-}
-
-#catalog-table thead td {
-    padding: 10px;
 }
 
 #catalog-table tbody tr {
@@ -87,13 +90,8 @@ select {
         font-size: 12px;
     }
 
-    input[type="text"] {
-        max-width: 100%;
+    #search-box {
         font-size: 14px;
-    }
-
-    select {
-        font-size: 12px;
     }
 
     #catalog-table tbody td img {
